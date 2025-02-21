@@ -1,7 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
@@ -17,6 +17,15 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
+// Root route for server check
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Quiz App Server is Running',
+    status: 'active',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Routes
 app.use('/api', authRoutes);
 app.use('/api', quizRoutes);
@@ -26,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
   // Use absolute path
   const clientBuildPath = path.join(__dirname, '../client/dist');
   app.use(express.static(clientBuildPath));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
@@ -41,4 +50,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Server health check available at http://localhost:${PORT}`);
 }); 
