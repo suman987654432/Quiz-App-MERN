@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
@@ -8,12 +9,7 @@ const quizRoutes = require('./routes/quiz');
 const app = express();
 
 // CORS configuration
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+app.use(cors());
 
 // Body parser
 app.use(express.json());
@@ -21,18 +17,18 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-// Debug middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`, {
-    headers: req.headers.authorization,
-    body: req.body
-  });
-  next();
-});
-
 // Routes
 app.use('/api', authRoutes);
 app.use('/api', quizRoutes);
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 // Error handling
 app.use((err, req, res, next) => {
