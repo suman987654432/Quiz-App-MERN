@@ -6,7 +6,6 @@ const AdminDashboard = () => {
   const [questions, setQuestions] = useState([]);
   const [userResults, setUserResults] = useState([]);
   const [activeTab, setActiveTab] = useState('questions'); // 'questions' or 'results'
-  const [globalTimer, setGlobalTimer] = useState(30);
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [newQuestion, setNewQuestion] = useState({
     question: '',
@@ -230,29 +229,6 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       setError('Failed to update question');
-      console.error('Error:', error);
-    }
-  };
-
-  const handleGlobalTimerUpdate = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/quiz/global-timer', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ globalTimer })
-      });
-
-      if (response.ok) {
-        setError('');
-      } else {
-        throw new Error('Failed to update global timer');
-      }
-    } catch (error) {
-      setError('Failed to update global timer');
       console.error('Error:', error);
     }
   };

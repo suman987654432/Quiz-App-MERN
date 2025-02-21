@@ -133,17 +133,10 @@ router.post('/quiz/toggle-status', auth, async (req, res) => {
 // Get active quiz questions (for users)
 router.get('/quiz/active', auth, async (req, res) => {
     try {
+        console.log('Fetching active quiz...');
         const questions = await Question.find();
-
-        // Don't send correct answers to users
-        const sanitizedQuestions = questions.map(q => ({
-            _id: q._id,
-            question: q.question,
-            options: q.options,
-            timer: q.timer
-        }));
-
-        res.json(sanitizedQuestions);
+        console.log(`Found ${questions.length} questions`);
+        res.json(questions);
     } catch (error) {
         console.error('Error fetching active quiz:', error);
         res.status(500).json({ message: 'Server error' });
@@ -267,11 +260,14 @@ router.put('/quiz/settings', auth, async (req, res) => {
 // Get quiz settings
 router.get('/quiz/settings', auth, async (req, res) => {
     try {
+        console.log('Fetching quiz settings...');
         let settings = await QuizSettings.findOne();
         if (!settings) {
-            settings = new QuizSettings({ duration: 30 }); // Default 30 minutes
+            console.log('No settings found, creating default...');
+            settings = new QuizSettings({ duration: 30 });
             await settings.save();
         }
+        console.log('Settings:', settings);
         res.json(settings);
     } catch (error) {
         console.error('Error fetching quiz settings:', error);

@@ -7,8 +7,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: process.env.NODE_ENV === 'production' 
-          ? 'https://your-render-url.onrender.com'
+        target: process.env.NODE_ENV === 'production'
+          ? 'https://quiz-app-mern-1.onrender.com/'
           : 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
