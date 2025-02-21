@@ -1,46 +1,46 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import UserLogin from './components/User/UserLogin';
 import QuizInterface from './components/User/QuizInterface';
 import Results from './components/User/Results';
-import ProtectedRoute from './components/ProtectedRoute';
+
+const AdminRoute = ({ children }) => {
+  const adminToken = localStorage.getItem('adminToken');
+  if (!adminToken) {
+    return <Navigate to="/admin" />;
+  }
+  return children;
+};
+
+AdminRoute.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className="App">
         <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<UserLogin />} />
+          <Route path="/quiz" element={<QuizInterface />} />
+          <Route path="/results" element={<Results />} />
+
           {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route 
-            path="/admin/dashboard" 
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
             element={
-              <ProtectedRoute role="admin">
+              <AdminRoute>
                 <AdminDashboard />
-              </ProtectedRoute>
-            } 
+              </AdminRoute>
+            }
           />
 
-          {/* User Routes */}
-          <Route path="/" element={<UserLogin />} />
-          <Route 
-            path="/quiz" 
-            element={
-              <ProtectedRoute role="user">
-                <QuizInterface />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/results" 
-            element={
-              <ProtectedRoute role="user">
-                <Results />
-              </ProtectedRoute>
-            } 
-          />
+          {/* Catch-all route for 404 */}
+          <Route path="*" element={<div>Page not found</div>} />
         </Routes>
       </div>
     </Router>

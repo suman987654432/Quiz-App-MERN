@@ -2,11 +2,23 @@ const mongoose = require('mongoose');
 
 const resultSchema = new mongoose.Schema({
     user: {
-        name: String,
-        email: String
+        name: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        }
     },
-    score: Number,
-    total: Number,
+    score: {
+        type: Number,
+        required: true
+    },
+    total: {
+        type: Number,
+        required: true
+    },
     answers: [{
         question: String,
         userAnswer: String,

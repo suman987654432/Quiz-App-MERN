@@ -1,38 +1,27 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+const auth = (req, res, next) => {
   try {
-    const authHeader = req.header('Authorization');
+    const authHeader = req.headers.authorization;
     
-    if (!authHeader) {
-      return res.status(401).json({ message: 'No token provided' });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'No token, authorization denied' });
     }
 
-    // Clean the token
-    const token = authHeader.replace('Bearer ', '').trim();
-
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
-    }
+    const token = authHeader.split(' ')[1];
 
     try {
-      // Verify with the exact same secret used to sign
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      
-      // Log successful verification
-      console.log('Token verified for:', decoded.email);
-      
       req.user = decoded;
       next();
-    } catch (jwtError) {
-      console.error('JWT Verification Error:', jwtError.message);
-      return res.status(401).json({ 
-        message: 'Invalid token',
-        error: jwtError.message 
-      });
+    } catch (err) {
+      console.error('Token verification failed:', err.message);
+      return res.status(401).json({ message: 'Token is invalid' });
     }
   } catch (error) {
-    console.error('Auth Middleware Error:', error);
+    console.error('Auth middleware error:', error);
     res.status(500).json({ message: 'Server error' });
   }
-}; 
+};
+
+module.exports = auth; 

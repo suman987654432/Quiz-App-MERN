@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const UserLogin = () => {
   const [userDetails, setUserDetails] = useState({
     name: '',
     email: ''
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -13,24 +14,30 @@ const UserLogin = () => {
     try {
       const response = await fetch('/api/user/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(userDetails)
       });
-      
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('userToken', data.token);
-        navigate('/quiz');
+
+      if (!response.ok) {
+        throw new Error('Login failed');
       }
+
+      const data = await response.json();
+      localStorage.setItem('userName', userDetails.name);
+      localStorage.setItem('userEmail', userDetails.email);
+      navigate('/quiz');
     } catch (error) {
-      console.error('Login failed:', error);
+      setError('Login failed. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">User Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Start Quiz</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Name</label>
@@ -59,6 +66,11 @@ const UserLogin = () => {
             Start Quiz
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <Link to="/admin" className="text-blue-500 hover:text-blue-700">
+            Admin Login
+          </Link>
+        </div>
       </div>
     </div>
   );
