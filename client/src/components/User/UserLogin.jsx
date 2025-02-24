@@ -66,11 +66,7 @@ const UserLogin = () => {
             Start Quiz
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <Link to="/admin" className="text-blue-500 hover:text-blue-700">
-            Admin Login
-          </Link>
-        </div>
+     
       </div>
     </div>
   );

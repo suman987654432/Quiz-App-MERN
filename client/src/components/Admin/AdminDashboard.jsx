@@ -282,8 +282,7 @@ const AdminDashboard = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete result');
+        throw new Error('Failed to delete result');
       }
 
       // Remove the deleted result from the state
@@ -291,7 +290,7 @@ const AdminDashboard = () => {
       setError('');
     } catch (err) {
       console.error('Error:', err);
-      setError('Failed to delete result: ' + err.message);
+      setError('Failed to delete result');
     }
   };
 

@@ -7,19 +7,19 @@ const QuizSettings = require('../models/QuizSettings');
 
 // Get quiz duration for users (no auth needed)
 router.get('/quiz/duration', async (req, res) => {  // Changed back to /quiz/duration
-  try {
-    const settings = await QuizSettings.findOne();
-    if (!settings) {
-      // Create default settings if none exist
-      const defaultSettings = new QuizSettings({ duration: 30 });
-      await defaultSettings.save();
-      return res.json({ duration: 30 });
+    try {
+        const settings = await QuizSettings.findOne();
+        if (!settings) {
+            // Create default settings if none exist
+            const defaultSettings = new QuizSettings({ duration: 30 });
+            await defaultSettings.save();
+            return res.json({ duration: 30 });
+        }
+        res.json({ duration: settings.duration });
+    } catch (error) {
+        console.error('Error fetching quiz duration:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-    res.json({ duration: settings.duration });
-  } catch (error) {
-    console.error('Error fetching quiz duration:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
 });
 
 // Get all questions (admin only)
@@ -141,7 +141,7 @@ router.post('/quiz/toggle-status', auth, async (req, res) => {
 router.get('/quiz/active', async (req, res) => {
     try {
         const questions = await Question.find().select('-correctAnswer');
-        
+
         const sanitizedQuestions = questions.map(q => ({
             _id: q._id,
             question: q.question,
@@ -160,14 +160,14 @@ router.get('/quiz/active', async (req, res) => {
 router.post('/quiz/submit', async (req, res) => {  // Changed back to /quiz/submit
     try {
         const { answers, userName, userEmail } = req.body;
-        
+
         if (!answers || !userName || !userEmail) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
         // Get all questions
         const questions = await Question.find();
-        
+
         if (!questions.length) {
             return res.status(400).json({ message: 'No questions available' });
         }
@@ -178,7 +178,7 @@ router.post('/quiz/submit', async (req, res) => {  // Changed back to /quiz/subm
             const userAnswer = answers[index];
             const correct = userAnswer === q.correctAnswer - 1;
             if (correct) score++;
-            
+
             return {
                 question: q.question,
                 userAnswer: q.options[userAnswer],
@@ -240,7 +240,7 @@ router.put('/questions/timer', auth, async (req, res) => {
         }
 
         const { timer } = req.body;
-        
+
         if (!timer || timer < 10 || timer > 180) {
             return res.status(400).json({ message: 'Invalid timer value' });
         }
@@ -263,7 +263,7 @@ router.put('/quiz/settings', auth, async (req, res) => {
         }
 
         const { duration } = req.body;
-        
+
         if (!duration || duration < 5 || duration > 180) {
             return res.status(400).json({ message: 'Invalid duration value' });
         }
@@ -304,29 +304,22 @@ router.get('/settings', auth, async (req, res) => {
 });
 
 // Delete a user result (admin only)
-router.delete('/quiz/results/:id', auth, async (req, res) => {  // Changed back to /quiz/results/:id
-  try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Not authorized' });
+router.delete('/quiz/results/:id', auth, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const result = await Result.findByIdAndDelete(req.params.id);
+        if (!result) {
+            return res.status(404).json({ message: 'Result not found' });
+        }
+
+        res.json({ message: 'Result deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting result:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    // Log the ID being deleted
-    console.log('Attempting to delete result with ID:', req.params.id);
-
-    const result = await Result.findById(req.params.id);
-    if (!result) {
-      console.log('Result not found with ID:', req.params.id);
-      return res.status(404).json({ message: 'Result not found' });
-    }
-
-    await Result.findByIdAndDelete(req.params.id);
-    console.log('Result deleted successfully');
-
-    res.json({ message: 'Result deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting result:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
 });
 
 module.exports = router; 

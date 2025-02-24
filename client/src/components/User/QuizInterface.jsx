@@ -40,7 +40,7 @@ const QuizInterface = () => {
   // Timer effect - only start when timeLeft is set and questions are loaded
   useEffect(() => {
     if (timeLeft === null || questions.length === 0) return; // Don't start timer until everything is ready
-    
+
     if (timeLeft <= 0) {
       handleSubmit();
       return;
@@ -63,7 +63,7 @@ const QuizInterface = () => {
   const fetchQuestions = async () => {
     try {
       const response = await fetch('/api/quiz/active');
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch questions');
       }
@@ -175,7 +175,7 @@ const QuizInterface = () => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div 
+            <div
               className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             ></div>
@@ -189,11 +189,10 @@ const QuizInterface = () => {
             <button
               key={index}
               onClick={() => handleAnswer(index)}
-              className={`w-full p-3 text-left rounded transition-colors ${
-                answers[currentQuestion] === index
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
-              }`}
+              className={`w-full p-3 text-left rounded transition-colors ${answers[currentQuestion] === index
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 hover:bg-gray-200'
+                }`}
             >
               {option}
             </button>
@@ -203,11 +202,10 @@ const QuizInterface = () => {
         <div className="mt-6 flex justify-between">
           <button
             onClick={handlePreviousQuestion}
-            className={`px-4 py-2 rounded ${
-              currentQuestion === 0
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
-            }`}
+            className={`px-4 py-2 rounded ${currentQuestion === 0
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
             disabled={currentQuestion === 0}
           >
             Previous

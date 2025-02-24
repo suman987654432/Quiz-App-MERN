@@ -33,9 +33,9 @@ const Results = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="text-center bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6">Quiz Completed!</h1>
-        <p className="text-xl mb-6">
+        {/* <p className="text-xl mb-6">
           Score: {result.score} out of {result.total}
-        </p>
+        </p> */}
         <button
           onClick={handleLogout}
           className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
