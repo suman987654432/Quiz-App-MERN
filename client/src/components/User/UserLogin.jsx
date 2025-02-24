@@ -46,7 +46,7 @@ const UserLogin = () => {
               type="text"
               className="w-full p-2 border rounded"
               value={userDetails.name}
-              onChange={(e) => setUserDetails({...userDetails, name: e.target.value})}
+              onChange={(e) => setUserDetails({ ...userDetails, name: e.target.value })}
               required
             />
           </div>
@@ -56,7 +56,7 @@ const UserLogin = () => {
               type="email"
               className="w-full p-2 border rounded"
               value={userDetails.email}
-              onChange={(e) => setUserDetails({...userDetails, email: e.target.value})}
+              onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
               required
             />
           </div>
@@ -67,7 +67,7 @@ const UserLogin = () => {
             Start Quiz
           </button>
         </form>
-     
+
       </div>
     </div>
   );

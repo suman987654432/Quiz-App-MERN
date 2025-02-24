@@ -74,7 +74,7 @@ const AdminLogin = () => {
             Login
           </button>
         </form>
-      
+
         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
           <p className="text-sm text-gray-600 text-center font-medium">
             Admin Credentials:

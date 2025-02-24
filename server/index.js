@@ -5,6 +5,7 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
+const { API_URL } = require('../client/src/config/config');
 
 const app = express();
 
