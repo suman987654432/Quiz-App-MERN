@@ -5,7 +5,6 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
-const { API_URL } = require('../client/src/config/config');
 
 const app = express();
 
@@ -19,8 +18,8 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use(`${API_URL}`, authRoutes);
-app.use(`${API_URL}`, quizRoutes);
+app.use(`/`, authRoutes);
+app.use(`/`, quizRoutes);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
