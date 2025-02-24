@@ -18,8 +18,8 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use('/api', authRoutes);
-app.use('/api', quizRoutes);
+app.use(`${API_URL}`, authRoutes);
+app.use(`${API_URL}`, quizRoutes);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {

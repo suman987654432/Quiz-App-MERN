@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config/config';
 
 const QuizInterface = () => {
   const [questions, setQuestions] = useState([]);
@@ -21,7 +22,7 @@ const QuizInterface = () => {
   useEffect(() => {
     const fetchQuizDuration = async () => {
       try {
-        const response = await fetch('/api/quiz/duration');
+        const response = await fetch(`${API_URL}/quiz/duration`);
         if (response.ok) {
           const data = await response.json();
           setTimeLeft(data.duration * 60); // Convert minutes to seconds
@@ -62,7 +63,7 @@ const QuizInterface = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch('/api/quiz/active');
+      const response = await fetch(`${API_URL}/quiz/active`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch questions');
@@ -113,7 +114,7 @@ const QuizInterface = () => {
         (_, i) => answers[i] || 0
       );
 
-      const response = await fetch('/api/quiz/submit', {
+      const response = await fetch(`${API_URL}/quiz/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

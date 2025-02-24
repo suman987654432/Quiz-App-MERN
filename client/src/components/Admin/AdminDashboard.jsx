@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ResultDetailsModal from './ResultDetailsModal';
+import { API_URL } from '../../config/config';
 
 const AdminDashboard = () => {
   const [questions, setQuestions] = useState([]);
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
   const fetchQuestions = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/questions', {
+      const response = await fetch(`${API_URL}/questions`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -60,6 +61,8 @@ const AdminDashboard = () => {
     }
   };
 
+
+
   const fetchUserResults = async () => {
     try {
       const token = localStorage.getItem('adminToken');
@@ -69,7 +72,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const response = await fetch('/api/quiz/results', {
+      const response = await fetch(`${API_URL}/quiz/results`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -91,7 +94,7 @@ const AdminDashboard = () => {
   const fetchQuizSettings = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/settings', {
+      const response = await fetch(`${API_URL}/settings`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -126,7 +129,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const response = await fetch('/api/questions', {
+      const response = await fetch(`${API_URL}/questions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +172,7 @@ const AdminDashboard = () => {
   const toggleLiveStatus = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      await fetch('/api/quiz/toggle-status', {
+      await fetch(`${API_URL}/quiz/toggle-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +197,7 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/questions/${questionId}`, {
+      const response = await fetch(`${API_URL}/questions/${questionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -217,7 +220,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/questions/${editingQuestion._id}`, {
+      const response = await fetch(`${API_URL}/questions/${editingQuestion._id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -244,7 +247,7 @@ const AdminDashboard = () => {
   const handleUpdateDuration = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/quiz/settings', {
+      const response = await fetch(`${API_URL}/quiz/settings`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -273,7 +276,7 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/quiz/results/${resultId}`, {
+      const response = await fetch(`${API_URL}/quiz/results/${resultId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

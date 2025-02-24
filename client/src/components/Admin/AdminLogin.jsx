@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../../config/config';
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -14,7 +15,7 @@ const AdminLogin = () => {
     setError(''); // Clear previous errors
 
     try {
-      const response = await fetch('/api/admin/login', {
+      const response = await fetch(`${API_URL}/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

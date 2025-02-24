@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config/config';
 
 const QuizInterface = () => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -26,7 +27,7 @@ const QuizInterface = () => {
                 throw new Error('No authentication token found');
             }
 
-            const response = await fetch('/api/quiz/settings', {
+            const response = await fetch(`${API_URL}/quiz/settings`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -57,7 +58,7 @@ const QuizInterface = () => {
                 throw new Error('No authentication token found');
             }
 
-            const response = await fetch('/api/quiz/active', {
+            const response = await fetch(`${API_URL}/quiz/active`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
