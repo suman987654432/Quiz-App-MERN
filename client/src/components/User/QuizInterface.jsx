@@ -99,15 +99,14 @@ const QuizInterface = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
   const handleSubmit = async () => {
     try {
-      // Check if all questions are answered
-      const unansweredQuestions = questions.length - Object.keys(answers).length;
-      if (unansweredQuestions > 0) {
-        setError(`Please answer all questions. ${unansweredQuestions} remaining.`);
-        return;
-      }
-
       // Convert answers object to array
       const answersArray = Array.from(
         { length: questions.length },
@@ -135,7 +134,8 @@ const QuizInterface = () => {
       navigate('/results', { state: { result: data } });
     } catch (err) {
       console.error('Submit error:', err);
-      setError('Failed to submit quiz: ' + err.message);
+      // Just navigate to results even if there's an error
+      navigate('/results');
     }
   };
 
@@ -143,12 +143,18 @@ const QuizInterface = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <p className="text-red-500 text-lg">{error}</p>
+          <p className="text-red-500 text-lg mb-4">{error}</p>
           <button
-            onClick={() => navigate('/')}
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            onClick={handleSubmit}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-4"
           >
-            Back to Start
+            Submit Anyway
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Logout
           </button>
         </div>
       </div>
@@ -166,6 +172,14 @@ const QuizInterface = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <span className="text-lg font-semibold">

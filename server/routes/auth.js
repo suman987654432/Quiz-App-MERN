@@ -8,15 +8,15 @@ const Admin = require('../models/Admin');
 router.post('/admin/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     console.log('Received login attempt:', { email }); // Log the attempt
 
     // Simple admin check
     if (email === 'admin@example.com' && password === 'admin123') {
       console.log('Admin credentials matched'); // Log successful match
-      
+
       const token = jwt.sign(
-        { 
+        {
           email,
           role: 'admin'
         },
@@ -47,13 +47,23 @@ router.post('/admin/login', async (req, res) => {
 router.post('/user/login', async (req, res) => {
   try {
     const { name, email } = req.body;
-    
+
     if (!name || !email) {
       return res.status(400).json({ message: 'Name and email are required' });
     }
 
-    res.json({ 
-      success: true,
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already used' });
+    }
+
+    // Proceed with login/signup logic
+    const newUser = new User({ name, email });
+    await newUser.save();
+
+    res.status(200).json({
+      message: 'Login successful',
       user: { name, email }
     });
   } catch (error) {

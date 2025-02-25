@@ -72,7 +72,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const response = await fetch('${API_URL}/quiz/results', {
+      const response = await fetch(`${API_URL}/quiz/results`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

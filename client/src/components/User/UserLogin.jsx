@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/config';
 
 const UserLogin = () => {
@@ -21,14 +21,19 @@ const UserLogin = () => {
         body: JSON.stringify(userDetails)
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
+        if (data.message === 'Email already used') {
+          alert('Email already used. Please use a different email.');
+          return;
+        }
         throw new Error('Login failed');
       }
 
-      const data = await response.json();
       localStorage.setItem('userName', userDetails.name);
       localStorage.setItem('userEmail', userDetails.email);
-      navigate('/quiz');
+      navigate('/start');
     } catch (error) {
       setError('Login failed. Please try again.');
     }
@@ -67,10 +72,9 @@ const UserLogin = () => {
             Start Quiz
           </button>
         </form>
-
       </div>
     </div>
   );
 };
 
-export default UserLogin; 
+export default UserLogin;

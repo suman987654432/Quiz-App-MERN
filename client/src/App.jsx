@@ -5,6 +5,7 @@ import AdminDashboard from './components/Admin/AdminDashboard';
 import UserLogin from './components/User/UserLogin';
 import QuizInterface from './components/User/QuizInterface';
 import Results from './components/User/Results';
+import StartPage from './components/User/StartPage';
 
 const AdminRoute = ({ children }) => {
   const adminToken = localStorage.getItem('adminToken');
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<UserLogin />} />
+          <Route path="/start" element={<StartPage />} />
           <Route path="/quiz" element={<QuizInterface />} />
           <Route path="/results" element={<Results />} />
 
